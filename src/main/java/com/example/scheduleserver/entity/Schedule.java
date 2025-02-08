@@ -20,4 +20,18 @@ public class Schedule extends DateEntity {
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     private User user;
+
+    public Schedule() {
+    }
+
+    public Schedule(String title, String contents, User user){
+        this.title = title;
+        this.contents = contents;
+        this.user = user;
+    }
+
+    public void update(String updateTitle, String updateContents) {
+        this.title = updateTitle;
+        this.contents = updateContents;
+    }
 }
