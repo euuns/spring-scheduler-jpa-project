@@ -14,9 +14,22 @@ public class User extends DateEntity {
     @Column(nullable = false, length = 10)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false, length = 20)
     private String password;
+
+    public User(){}
+
+    public User(String name, String email, String password){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public void updateInfo(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }
