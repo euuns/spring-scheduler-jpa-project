@@ -20,7 +20,7 @@ public class UserController {
 
 
     // 회원가입
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> signup(@RequestBody SignupRequestDto requestDto){
         UserResponseDto user = userService.signup(requestDto.getName(), requestDto.getEmail(), requestDto.getPassword());
         return new ResponseEntity<>(user, HttpStatus.CREATED);

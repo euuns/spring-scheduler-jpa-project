@@ -19,7 +19,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     // 일정 생성
-    @PostMapping
+    @PostMapping("/writing")
     public ResponseEntity<ScheduleResponseDto> addSchedule(@RequestBody ScheduleRequestDto requestDto, HttpServletRequest httpServletRequest){
         ScheduleResponseDto schedule = scheduleService.addSchedule(requestDto.getTitle(), requestDto.getContents(), httpServletRequest.getSession());
         return new ResponseEntity<>(schedule, HttpStatus.CREATED);

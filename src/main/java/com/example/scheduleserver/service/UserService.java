@@ -103,7 +103,7 @@ public class UserService {
     // 비밀번호가 일치하는지 조회
     private void validatePassword(String findUserPassword, String requestPassword){
         if(! findUserPassword.equals(requestPassword)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Password does not match.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
         }
     }
 
@@ -112,10 +112,6 @@ public class UserService {
     private void validateSessionUser(HttpServletRequest httpServletRequest, Long requestId){
         HttpSession session = httpServletRequest.getSession();
         User sessionUser = (User) session.getAttribute("login");
-
-        if(sessionUser == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please log in.");
-        }
 
         if(! sessionUser.getId().equals(requestId)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Access.");
