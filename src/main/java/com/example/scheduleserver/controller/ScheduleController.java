@@ -3,10 +3,12 @@ package com.example.scheduleserver.controller;
 import com.example.scheduleserver.dto.ScheduleRequestDto;
 import com.example.scheduleserver.dto.ScheduleResponseDto;
 import com.example.scheduleserver.service.ScheduleService;
+import com.example.scheduleserver.validate.AddSchedule;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,13 +16,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/schedule")
 @RequiredArgsConstructor
+@Validated
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
     // 일정 생성
     @PostMapping("/writing")
-    public ResponseEntity<ScheduleResponseDto> addSchedule(@RequestBody ScheduleRequestDto requestDto, HttpServletRequest httpServletRequest){
+    public ResponseEntity<ScheduleResponseDto> addSchedule(@Validated(AddSchedule.class) @RequestBody ScheduleRequestDto requestDto, HttpServletRequest httpServletRequest){
         ScheduleResponseDto schedule = scheduleService.addSchedule(requestDto.getTitle(), requestDto.getContents(), httpServletRequest.getSession());
         return new ResponseEntity<>(schedule, HttpStatus.CREATED);
     }

@@ -1,15 +1,19 @@
 package com.example.scheduleserver.dto;
 
+import com.example.scheduleserver.validate.AddSchedule;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
 public class ScheduleRequestDto {
-    private final Long id;
+
+    @NotBlank(groups = {AddSchedule.class}, message = "'title' Must not be Empty.")
     private final String title;
+
+    @NotBlank(groups = {AddSchedule.class}, message = "'contents' Must not be Empty.")
     private final String contents;
 
-    public ScheduleRequestDto(Long id, String title, String contents) {
-        this.id = id;
+    public ScheduleRequestDto(String title, String contents) {
         this.title = title;
         this.contents = contents;
     }
