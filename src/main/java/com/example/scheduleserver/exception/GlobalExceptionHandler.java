@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestControllerAdvice
-public class ViolationHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErrorResponseDto>> violationException(MethodArgumentNotValidException e) {

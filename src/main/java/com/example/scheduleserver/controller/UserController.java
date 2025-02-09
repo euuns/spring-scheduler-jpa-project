@@ -9,11 +9,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -21,7 +23,7 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signup(@RequestBody SignupRequestDto requestDto){
+    public ResponseEntity<UserResponseDto> signup(@Validated @RequestBody SignupRequestDto requestDto){
         UserResponseDto user = userService.signup(requestDto.getName(), requestDto.getEmail(), requestDto.getPassword());
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -29,7 +31,7 @@ public class UserController {
 
     // 세션을 받아오기 위한 로그인
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody LoginRequestDto requestDto, HttpServletRequest httpServletRequest){
+    public ResponseEntity<UserResponseDto> login(@Validated @RequestBody LoginRequestDto requestDto, HttpServletRequest httpServletRequest){
         UserResponseDto login = userService.login(requestDto.getEmail(), requestDto.getPassword(), httpServletRequest);
         return new ResponseEntity<>(login, HttpStatus.OK);
     }
