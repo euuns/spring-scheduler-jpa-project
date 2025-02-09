@@ -1,5 +1,6 @@
 package com.example.scheduleserver.service;
 
+import com.example.scheduleserver.config.PasswordEncoder;
 import com.example.scheduleserver.dto.UserResponseDto;
 import com.example.scheduleserver.entity.User;
 import com.example.scheduleserver.exception.SessionUserNotEqualsException;
@@ -17,12 +18,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     // 회원 가입
     public UserResponseDto signup(String name, String email, String password) {
+        // 비밀번호를 암호화
+        String encoderPassword = passwordEncoder.encoder(password);
+
         // 정보를 담은 User 생성
-        User getUser = new User(name, email, password);
+        User getUser = new User(name, email, encoderPassword);
 
         // SpringDataJPA를 이용해 SimpleJpaRepository 사용 -> save() 저장
         // savedUser는 DB에 저장된 user entity
@@ -41,7 +46,9 @@ public class UserService {
         User findUser = userRepository.findByEmailOrElseThrow(email);
 
         // 비밀번호가 일치하는지 확인
-        validatePassword(findUser.getPassword(), password);
+        if(! passwordEncoder.matches(password, findUser.getPassword())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
+        }
 
         // 유저 정보를 찾았고, 비밀번호가 일치한다면 로그인 성공 -> 세션 응답
         HttpSession session = httpServletRequest.getSession();
@@ -101,14 +108,6 @@ public class UserService {
 
 
 
-    // 비밀번호가 일치하는지 조회
-    private void validatePassword(String findUserPassword, String requestPassword){
-        if(! findUserPassword.equals(requestPassword)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
-        }
-    }
-
-
     // 요청받은 세션 정보를 통해 조회한 후, id 비교
     private void validateSessionUser(HttpServletRequest httpServletRequest, Long requestId){
         HttpSession session = httpServletRequest.getSession();
@@ -118,4 +117,5 @@ public class UserService {
             throw new SessionUserNotEqualsException();
         }
     }
+
 }
