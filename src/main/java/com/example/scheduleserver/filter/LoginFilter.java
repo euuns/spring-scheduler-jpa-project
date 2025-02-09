@@ -31,7 +31,12 @@ public class LoginFilter implements Filter {
 
             // session이 없는 경우 -> 로그인을 하지 않음
             if( session == null || session.getAttribute("login") == null){
-                httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Please log in.");
+                // 상태코드 지정
+                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+                // 클라이언트에게 전달할 메세지 작성 후 반환
+                httpServletResponse.setContentType("application/json");
+                httpServletResponse.getWriter().write("Please log in.");
                 return;
             }
         }
