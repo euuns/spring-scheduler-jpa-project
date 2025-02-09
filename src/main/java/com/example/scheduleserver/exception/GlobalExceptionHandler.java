@@ -28,4 +28,8 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(SessionUserNotEqualsException.class)
+    public ResponseEntity<String> sessionNotEqualException(SessionUserNotEqualsException e){
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 }

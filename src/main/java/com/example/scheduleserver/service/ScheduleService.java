@@ -3,14 +3,13 @@ package com.example.scheduleserver.service;
 import com.example.scheduleserver.dto.ScheduleResponseDto;
 import com.example.scheduleserver.entity.Schedule;
 import com.example.scheduleserver.entity.User;
+import com.example.scheduleserver.exception.SessionUserNotEqualsException;
 import com.example.scheduleserver.repository.ScheduleRepository;
 import com.example.scheduleserver.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -96,7 +95,7 @@ public class ScheduleService {
     // 일정을 작성한 사람과 요청한 사람이 동일한지 확인
     private void validateSessionUser(Long sessionUserId, Long scheduleUserId){
         if(! sessionUserId.equals(scheduleUserId)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Access.");
+            throw new SessionUserNotEqualsException();
         }
     }
 

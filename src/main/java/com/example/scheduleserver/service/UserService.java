@@ -2,6 +2,7 @@ package com.example.scheduleserver.service;
 
 import com.example.scheduleserver.dto.UserResponseDto;
 import com.example.scheduleserver.entity.User;
+import com.example.scheduleserver.exception.SessionUserNotEqualsException;
 import com.example.scheduleserver.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -114,7 +115,7 @@ public class UserService {
         User sessionUser = (User) session.getAttribute("login");
 
         if(! sessionUser.getId().equals(requestId)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Access.");
+            throw new SessionUserNotEqualsException();
         }
     }
 }
