@@ -1,4 +1,4 @@
-package com.example.scheduleserver.dto;
+package com.example.scheduleserver.dto.comment;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
