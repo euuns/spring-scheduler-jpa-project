@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class Comment extends DateEntity{
+public class Comment extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,7 +13,7 @@ public class Comment extends DateEntity{
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
-    private User use;
+    private User user;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
@@ -26,11 +26,13 @@ public class Comment extends DateEntity{
     public Comment() {
     }
 
-    public Comment(String contents) {
+    public Comment(Schedule schedule, User user, String contents) {
+        this.schedule = schedule;
+        this.user = user;
         this.contents = contents;
     }
 
-    public void update(String contents){
+    public void update(String contents) {
         this.contents = contents;
     }
 }

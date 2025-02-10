@@ -1,6 +1,6 @@
 package com.example.scheduleserver.service;
 
-import com.example.scheduleserver.dto.ScheduleResponseDto;
+import com.example.scheduleserver.dto.schedule.ScheduleResponseDto;
 import com.example.scheduleserver.entity.Schedule;
 import com.example.scheduleserver.entity.User;
 import com.example.scheduleserver.exception.SessionUserNotEqualsException;

@@ -1,9 +1,9 @@
 package com.example.scheduleserver.controller;
 
-import com.example.scheduleserver.dto.LoginRequestDto;
-import com.example.scheduleserver.dto.SignupRequestDto;
-import com.example.scheduleserver.dto.UpdateUserInfoRequestDto;
-import com.example.scheduleserver.dto.UserResponseDto;
+import com.example.scheduleserver.dto.user.LoginRequestDto;
+import com.example.scheduleserver.dto.user.SignupRequestDto;
+import com.example.scheduleserver.dto.user.UpdateUserInfoRequestDto;
+import com.example.scheduleserver.dto.user.UserResponseDto;
 import com.example.scheduleserver.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

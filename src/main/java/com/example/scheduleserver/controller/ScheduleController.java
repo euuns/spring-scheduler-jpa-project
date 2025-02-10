@@ -1,7 +1,7 @@
 package com.example.scheduleserver.controller;
 
-import com.example.scheduleserver.dto.ScheduleRequestDto;
-import com.example.scheduleserver.dto.ScheduleResponseDto;
+import com.example.scheduleserver.dto.schedule.ScheduleRequestDto;
+import com.example.scheduleserver.dto.schedule.ScheduleResponseDto;
 import com.example.scheduleserver.service.ScheduleService;
 import com.example.scheduleserver.validate.AddSchedule;
 import jakarta.servlet.http.HttpServletRequest;

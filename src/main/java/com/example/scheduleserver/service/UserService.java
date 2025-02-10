@@ -1,7 +1,7 @@
 package com.example.scheduleserver.service;
 
 import com.example.scheduleserver.config.PasswordEncoder;
-import com.example.scheduleserver.dto.UserResponseDto;
+import com.example.scheduleserver.dto.user.UserResponseDto;
 import com.example.scheduleserver.entity.User;
 import com.example.scheduleserver.exception.SessionUserNotEqualsException;
 import com.example.scheduleserver.repository.UserRepository;
