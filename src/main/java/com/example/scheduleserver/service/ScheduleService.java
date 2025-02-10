@@ -27,7 +27,7 @@ public class ScheduleService {
     private final UserRepository userRepository;
 
     // 페이지 기본 사이즈
-    private final static int PAGE_SIZE = 3;
+    private final static int PAGE_SIZE = 10;
 
     // 일정 생성
     public ScheduleResponseDto addSchedule(String title, String contents, HttpSession session) {
