@@ -9,7 +9,6 @@ import com.example.scheduleserver.repository.ScheduleRepository;
 import com.example.scheduleserver.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
-public class ScheduleService {
+public class ScheduleService extends ValidateSessionService {
 
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
@@ -110,13 +108,4 @@ public class ScheduleService {
         // 요청한 유저와 작성자가 일치하면 글 삭제
         scheduleRepository.delete(findSchedule);
     }
-
-
-    // 일정을 작성한 사람과 요청한 사람이 동일한지 확인
-    private void validateSessionUser(Long sessionUserId, Long scheduleUserId) {
-        if (!sessionUserId.equals(scheduleUserId)) {
-            throw new ValidException(ExceptionCode.SESSION_NOT_VALID);
-        }
-    }
-
 }

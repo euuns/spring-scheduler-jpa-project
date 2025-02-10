@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService extends ValidateSessionService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -104,14 +104,6 @@ public class UserService {
         // 유저 정보를 찾아 데이터 삭제
         User deleteUser = userRepository.findByIdOrElseThrow(id);
         userRepository.delete(deleteUser);
-    }
-
-
-    // 요청받은 세션 정보를 통해 조회한 후, id 비교
-    private void validateSessionUser(Long sessionUserId, Long requestId) {
-        if (!sessionUserId.equals(requestId)) {
-            throw new ValidException(ExceptionCode.SESSION_NOT_VALID);
-        }
     }
 
 }

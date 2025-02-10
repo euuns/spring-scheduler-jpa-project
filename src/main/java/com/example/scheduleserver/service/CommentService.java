@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService {
+public class CommentService extends ValidateSessionService {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
@@ -82,30 +82,22 @@ public class CommentService {
     }
 
 
-    // 요청-작성자 비교
-    private void validateSessionUser(Long sessionUserId, Long commentUserId) {
-        if (!sessionUserId.equals(commentUserId)) {
-            throw new ValidException(ExceptionCode.SESSION_NOT_VALID);
-        }
-    }
-
-
     // List를 Page로 변환
-    private Page<Comment> listToPage(List<Comment> list, Pageable pageable){
+    private Page<Comment> listToPage(List<Comment> list, Pageable pageable) {
         // 페이지 범위 지정
         int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()),list.size());
+        int end = Math.min((start + pageable.getPageSize()), list.size());
 
         //offset으로 지정한 페이지 범위가 벗어나는 경우 예외 처리
         validateRequestPage(start, end);
 
-        Page<Comment> commentPage = new PageImpl<>(list.subList(start,end), pageable, list.size());
+        Page<Comment> commentPage = new PageImpl<>(list.subList(start, end), pageable, list.size());
 
         // Page로 반환
         return commentPage;
     }
 
-    private void validateRequestPage(int start, int end){
+    private void validateRequestPage(int start, int end) {
         if (end < start) {
             throw new ValidException(ExceptionCode.PAGE_OVER);
         }
