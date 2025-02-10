@@ -40,13 +40,13 @@ public class UserService {
 
 
     // 로그인
-    public UserResponseDto login(String email, String password, HttpServletRequest httpServletRequest){
+    public UserResponseDto login(String email, String password, HttpServletRequest httpServletRequest) {
 
         // Unique인 email을 이용해서 정보 조회
         User findUser = userRepository.findByEmailOrElseThrow(email);
 
         // 비밀번호가 일치하는지 확인
-        if(! passwordEncoder.matches(password, findUser.getPassword())){
+        if (!passwordEncoder.matches(password, findUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
         }
 
@@ -79,10 +79,10 @@ public class UserService {
         // 만약 name, password 중 변경하지 않는 내용이 있으면 이전과 동일하게 유지
         String updateName = findUser.getName();
         String updatePassword = findUser.getPassword();
-        if(name!=null){
+        if (name != null) {
             updateName = name;
         }
-        if (password!=null) {
+        if (password != null) {
             updatePassword = password;
         }
 
@@ -107,13 +107,12 @@ public class UserService {
     }
 
 
-
     // 요청받은 세션 정보를 통해 조회한 후, id 비교
-    private void validateSessionUser(HttpServletRequest httpServletRequest, Long requestId){
+    private void validateSessionUser(HttpServletRequest httpServletRequest, Long requestId) {
         HttpSession session = httpServletRequest.getSession();
         User sessionUser = (User) session.getAttribute("login");
 
-        if(! sessionUser.getId().equals(requestId)){
+        if (!sessionUser.getId().equals(requestId)) {
             throw new SessionUserNotEqualsException();
         }
     }

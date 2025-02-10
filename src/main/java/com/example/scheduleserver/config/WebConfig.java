@@ -12,7 +12,7 @@ public class WebConfig {
 
 
     @Bean
-    public FilterRegistrationBean loginFilter(){
+    public FilterRegistrationBean loginFilter() {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
 
         // 생성한 필터 등록

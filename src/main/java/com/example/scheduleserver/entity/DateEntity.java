@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class DateEntity{
+public abstract class DateEntity {
 
 
     @CreatedDate
@@ -23,13 +23,13 @@ public abstract class DateEntity{
     private String modifiedDate;
 
     @PrePersist
-    public void onPrePersist(){
+    public void onPrePersist() {
         this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         this.modifiedDate = this.createdDate;
     }
 
     @PreUpdate
-    public void onPreUpdate(){
+    public void onPreUpdate() {
         this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     }
 }

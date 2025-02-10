@@ -22,7 +22,7 @@ public class CommentResponseDto {
         this.modifiedDate = modifiedDate;
     }
 
-    public static CommentResponseDto toDto(Comment comment){
+    public static CommentResponseDto toDto(Comment comment) {
         User getUser = comment.getUser();
         Schedule getSchedule = comment.getSchedule();
 
@@ -30,7 +30,7 @@ public class CommentResponseDto {
                 comment.getCreatedDate(), comment.getModifiedDate());
     }
 
-    public CommentResponseDto(Comment comment){
+    public CommentResponseDto(Comment comment) {
         this.userName = comment.getUser().getName();
         this.scheduleTitle = comment.getSchedule().getTitle();
         this.contents = comment.getContents();

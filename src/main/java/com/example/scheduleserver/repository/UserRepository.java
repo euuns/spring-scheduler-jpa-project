@@ -13,8 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // id로 user를 찾고, 있으면 User Entity로 반환한다.
     // or Else 만약 없으면 Throw 예외를 던진다.
-    default User findByIdOrElseThrow(Long id){
-        return findById(id).orElseThrow(()->
+    default User findByIdOrElseThrow(Long id) {
+        return findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id: " + id));
     }
 
@@ -25,8 +25,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(@Param("email") String email);
 
 
-    default User findByEmailOrElseThrow(String email){
-        return findByEmail(email).orElseThrow(()->
+    default User findByEmailOrElseThrow(String email) {
+        return findByEmail(email).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist email: " + email));
     }
 

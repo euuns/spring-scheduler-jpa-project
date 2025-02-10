@@ -24,7 +24,7 @@ public class Schedule extends DateEntity {
     public Schedule() {
     }
 
-    public Schedule(String title, String contents, User user){
+    public Schedule(String title, String contents, User user) {
         this.title = title;
         this.contents = contents;
         this.user = user;

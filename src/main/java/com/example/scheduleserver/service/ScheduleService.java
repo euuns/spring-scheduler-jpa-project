@@ -68,10 +68,10 @@ public class ScheduleService {
         // 변경하지 않는 내용이 있으면(null인 경우) 이전 내용과 동일하게 유지
         String updateTitle = findSchedule.getTitle();
         String updateContents = findSchedule.getContents();
-        if(title!=null){
+        if (title != null) {
             updateTitle = title;
         }
-        if (contents!=null) {
+        if (contents != null) {
             updateContents = contents;
         }
 
@@ -93,8 +93,8 @@ public class ScheduleService {
 
 
     // 일정을 작성한 사람과 요청한 사람이 동일한지 확인
-    private void validateSessionUser(Long sessionUserId, Long scheduleUserId){
-        if(! sessionUserId.equals(scheduleUserId)){
+    private void validateSessionUser(Long sessionUserId, Long scheduleUserId) {
+        if (!sessionUserId.equals(scheduleUserId)) {
             throw new SessionUserNotEqualsException();
         }
     }

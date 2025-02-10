@@ -24,13 +24,13 @@ public class LoginFilter implements Filter {
 
 
         // 로그인 인증이 필요한 path인 경우
-        if(! isWhiteList(requestURI)){
+        if (!isWhiteList(requestURI)) {
 
             // session 확인
             HttpSession session = httpServletRequest.getSession(false);
 
             // session이 없는 경우 -> 로그인을 하지 않음
-            if( session == null || session.getAttribute("login") == null){
+            if (session == null || session.getAttribute("login") == null) {
                 // 상태코드 지정
                 httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
@@ -47,9 +47,7 @@ public class LoginFilter implements Filter {
     }
 
 
-
-
-    private boolean isWhiteList(String requestURI){
+    private boolean isWhiteList(String requestURI) {
         // 요청 path가 앞에 선언한 WHITE_LIST에 일치하지 않으면 false 반환
         return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
     }

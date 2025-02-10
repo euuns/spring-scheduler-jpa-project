@@ -19,7 +19,7 @@ public class ScheduleResponseDto {
         this.modifiedDate = modifiedDate;
     }
 
-    public static ScheduleResponseDto toDto(Schedule schedule){
+    public static ScheduleResponseDto toDto(Schedule schedule) {
         return new ScheduleResponseDto(schedule.getUser().getName(), schedule.getTitle(), schedule.getContents(),
                 schedule.getCreatedDate(), schedule.getModifiedDate());
     }

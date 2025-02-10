@@ -23,7 +23,7 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signup(@Validated @RequestBody SignupRequestDto requestDto){
+    public ResponseEntity<UserResponseDto> signup(@Validated @RequestBody SignupRequestDto requestDto) {
         UserResponseDto user = userService.signup(requestDto.getName(), requestDto.getEmail(), requestDto.getPassword());
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -31,7 +31,7 @@ public class UserController {
 
     // 세션을 받아오기 위한 로그인
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@Validated @RequestBody LoginRequestDto requestDto, HttpServletRequest httpServletRequest){
+    public ResponseEntity<UserResponseDto> login(@Validated @RequestBody LoginRequestDto requestDto, HttpServletRequest httpServletRequest) {
         UserResponseDto login = userService.login(requestDto.getEmail(), requestDto.getPassword(), httpServletRequest);
         return new ResponseEntity<>(login, HttpStatus.OK);
     }
@@ -39,7 +39,7 @@ public class UserController {
 
     // 로그인이 성공하면 세션이 저장되어 조회
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> findById(@PathVariable Long id, HttpServletRequest httpServletRequest){
+    public ResponseEntity<UserResponseDto> findById(@PathVariable Long id, HttpServletRequest httpServletRequest) {
         UserResponseDto user = userService.findById(id, httpServletRequest);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -47,7 +47,7 @@ public class UserController {
 
     // 개인 정보 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateUserInfo(@PathVariable Long id, @RequestBody UpdateUserInfoRequestDto requestDto, HttpServletRequest httpServletRequest){
+    public ResponseEntity<UserResponseDto> updateUserInfo(@PathVariable Long id, @RequestBody UpdateUserInfoRequestDto requestDto, HttpServletRequest httpServletRequest) {
         UserResponseDto user = userService.updateUserInfo(id, requestDto.getName(), requestDto.getPassword(), httpServletRequest);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class UserController {
 
     // 회원 탈퇴
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id, HttpServletRequest httpServletRequest){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id, HttpServletRequest httpServletRequest) {
         userService.delete(id, httpServletRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
