@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,8 +52,9 @@ public class ScheduleService extends ValidateSessionService {
             throw new ValidException(ExceptionCode.PAGE_NOT_POSITIVE);
         }
 
+        Sort sort = Sort.by(Sort.Order.desc("modifiedDate"));
         // 요청에 맞는 페이지 정보 생성 후 반환
-        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, sort);
         Page<Schedule> schedulePage = scheduleRepository.findAll(pageable);
 
         // 요청 페이지가 최대 페이지보다 클 경우
