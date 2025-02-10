@@ -34,8 +34,9 @@ public class CommentController {
 
     // 댓글 조회 -> /schedule/{id} 에 작성된 모든 댓글 /comment 조회
     @GetMapping("/{scheduleId}/comment")
-    public ResponseEntity<List<CommentResponseDto>> getCommentList(@PathVariable Long scheduleId) {
-        List<CommentResponseDto> commentList = commentService.getCommentList(scheduleId);
+    public ResponseEntity<List<CommentResponseDto>> getCommentList(@PathVariable Long scheduleId,
+                                                                   @RequestParam(required = false, defaultValue = "1", value = "page") int pageNo) {
+        List<CommentResponseDto> commentList = commentService.getCommentList(scheduleId, pageNo-1);
         return new ResponseEntity<>(commentList, HttpStatus.OK);
     }
 

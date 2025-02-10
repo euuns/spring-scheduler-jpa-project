@@ -10,6 +10,10 @@ import com.example.scheduleserver.repository.CommentRepository;
 import com.example.scheduleserver.repository.ScheduleRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
+
+    private final static int PAGE_SIZE = 2;
 
     // 댓글 작성
     public CommentResponseDto addComment(Long scheduleId, HttpSession session, String contents) {
@@ -35,16 +41,20 @@ public class CommentService {
 
 
     // 댓글 조회
-    public List<CommentResponseDto> getCommentList(Long scheduleId) {
-        // scheduleId를 이용해 schedule을 조건으로 commentList 반환
-        List<Comment> findBySchedule = commentRepository.findAllByScheduleId(scheduleId);
+    public List<CommentResponseDto> getCommentList(Long scheduleId, int pageNo) {
+        if (pageNo < 0) {
+            throw new ValidException(ExceptionCode.PAGE_NOT_POSITIVE);
+        }
+        // scheduleId가 존재하지 않으면 예외 처리
+        scheduleRepository.findByIdOrElseThrow(scheduleId);
 
-        // Comment를 CommentResponseDto로 변환
-        List<CommentResponseDto> commentList = findBySchedule.stream()
-                .map(CommentResponseDto::toDto)
-                .toList();
+        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
+        List<Comment> findByScheduleComment = commentRepository.findAllByScheduleId(scheduleId);
 
-        return commentList;
+        // List를 Page로 변환
+        Page<Comment> commentPage = listToPage(findByScheduleComment, pageable);
+
+        return commentPage.stream().map(CommentResponseDto::toDto).toList();
     }
 
 
@@ -76,6 +86,28 @@ public class CommentService {
     private void validateSessionUser(Long sessionUserId, Long commentUserId) {
         if (!sessionUserId.equals(commentUserId)) {
             throw new ValidException(ExceptionCode.SESSION_NOT_VALID);
+        }
+    }
+
+
+    // List를 Page로 변환
+    private Page<Comment> listToPage(List<Comment> list, Pageable pageable){
+        // 페이지 범위 지정
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()),list.size());
+
+        //offset으로 지정한 페이지 범위가 벗어나는 경우 예외 처리
+        validateRequestPage(start, end);
+
+        Page<Comment> commentPage = new PageImpl<>(list.subList(start,end), pageable, list.size());
+
+        // Page로 반환
+        return commentPage;
+    }
+
+    private void validateRequestPage(int start, int end){
+        if (end < start) {
+            throw new ValidException(ExceptionCode.PAGE_OVER);
         }
     }
 }

@@ -14,5 +14,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                 new ValidException(ExceptionCode.COMMENT_NOT_FOUND));
     }
 
-    List<Comment> findAllByScheduleId(long scheduleId);
+    List<Comment> findAllByScheduleId(Long scheduleId);
+
 }
