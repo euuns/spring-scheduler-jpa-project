@@ -26,7 +26,7 @@ public class CommentService extends ValidateSessionService {
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
 
-    private final static int PAGE_SIZE = 2;
+    private final static int PAGE_SIZE = 20;
 
     // 댓글 작성
     public CommentResponseDto addComment(Long scheduleId, HttpSession session, String contents) {
