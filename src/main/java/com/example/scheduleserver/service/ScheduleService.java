@@ -8,6 +8,9 @@ import com.example.scheduleserver.repository.ScheduleRepository;
 import com.example.scheduleserver.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,9 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+
+    // 페이지 기본 사이즈
+    private final static int PAGE_SIZE = 10;
 
     // 일정 생성
     public ScheduleResponseDto addSchedule(String title, String contents, HttpSession session) {
@@ -38,11 +44,13 @@ public class ScheduleService {
     }
 
     // 전체 조회
-    public List<ScheduleResponseDto> getScheduleList() {
-        List<ScheduleResponseDto> scheduleList = scheduleRepository.findAll().stream()
-                .map(ScheduleResponseDto::toDto)
-                .toList();
-        return scheduleList;
+    public List<ScheduleResponseDto> getScheduleList(int pageNo) {
+        // 요청에 맞는 페이지 정보 생성
+        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
+        // 페이지에 맞는 Schedule 반환
+        Page<Schedule> schedulePage = scheduleRepository.findAll(pageable);
+        // Schedule을 ResponseDto로 변환하고, List로 바꿔서 반환
+        return schedulePage.stream().map(ScheduleResponseDto::toDto).toList();
     }
 
     // 선택 조회
