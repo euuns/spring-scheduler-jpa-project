@@ -58,9 +58,10 @@ public class UserService {
 
 
     // 정보 조회
-    public UserResponseDto findById(Long id, HttpServletRequest httpServletRequest) {
+    public UserResponseDto findById(Long id, HttpSession session) {
         // 요청한 id와 등록된 세션의 id가 일치하는지 검사 -> 아닐 경우 예외 처리
-        validateSessionUser(httpServletRequest, id);
+        User login = (User) session.getAttribute("login");
+        validateSessionUser(login.getId(), id);
 
         // 로그인한 유저일 경우 id를 이용해 정보 조회
         User findUser = userRepository.findByIdOrElseThrow(id);
@@ -70,8 +71,9 @@ public class UserService {
 
     // 개인 정보 수정
     @Transactional
-    public UserResponseDto updateUserInfo(Long id, String name, String password, HttpServletRequest httpServletRequest) {
-        validateSessionUser(httpServletRequest, id);
+    public UserResponseDto updateUserInfo(Long id, String name, String password, HttpSession session) {
+        User login = (User) session.getAttribute("login");
+        validateSessionUser(login.getId(), id);
         User findUser = userRepository.findByIdOrElseThrow(id);
 
         // 만약 name, password 중 변경하지 않는 내용이 있으면 이전과 동일하게 유지
@@ -92,11 +94,11 @@ public class UserService {
 
 
     // 회원 탈퇴
-    public void delete(Long id, HttpServletRequest httpServletRequest) {
+    public void delete(Long id, HttpSession session) {
 
         // 알맞는 유저가 요청을 했으면 session 삭제
-        validateSessionUser(httpServletRequest, id);
-        HttpSession session = httpServletRequest.getSession();
+        User login = (User) session.getAttribute("login");
+        validateSessionUser(login.getId(), id);
         session.invalidate();
 
         // 유저 정보를 찾아 데이터 삭제
@@ -106,11 +108,8 @@ public class UserService {
 
 
     // 요청받은 세션 정보를 통해 조회한 후, id 비교
-    private void validateSessionUser(HttpServletRequest httpServletRequest, Long requestId) {
-        HttpSession session = httpServletRequest.getSession();
-        User sessionUser = (User) session.getAttribute("login");
-
-        if (!sessionUser.getId().equals(requestId)) {
+    private void validateSessionUser(Long sessionUserId, Long requestId) {
+        if (!sessionUserId.equals(requestId)) {
             throw new ValidException(ExceptionCode.SESSION_NOT_VALID);
         }
     }

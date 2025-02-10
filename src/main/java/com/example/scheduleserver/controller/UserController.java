@@ -40,7 +40,7 @@ public class UserController {
     // 로그인이 성공하면 세션이 저장되어 조회
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> findById(@PathVariable Long id, HttpServletRequest httpServletRequest) {
-        UserResponseDto user = userService.findById(id, httpServletRequest);
+        UserResponseDto user = userService.findById(id, httpServletRequest.getSession());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -48,7 +48,7 @@ public class UserController {
     // 개인 정보 수정
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUserInfo(@PathVariable Long id, @RequestBody UpdateUserInfoRequestDto requestDto, HttpServletRequest httpServletRequest) {
-        UserResponseDto user = userService.updateUserInfo(id, requestDto.getName(), requestDto.getPassword(), httpServletRequest);
+        UserResponseDto user = userService.updateUserInfo(id, requestDto.getName(), requestDto.getPassword(), httpServletRequest.getSession());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -56,7 +56,7 @@ public class UserController {
     // 회원 탈퇴
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, HttpServletRequest httpServletRequest) {
-        userService.delete(id, httpServletRequest);
+        userService.delete(id, httpServletRequest.getSession());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
