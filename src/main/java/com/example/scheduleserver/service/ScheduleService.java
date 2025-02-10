@@ -3,8 +3,8 @@ package com.example.scheduleserver.service;
 import com.example.scheduleserver.dto.schedule.ScheduleResponseDto;
 import com.example.scheduleserver.entity.Schedule;
 import com.example.scheduleserver.entity.User;
-import com.example.scheduleserver.exception.PageOverException;
-import com.example.scheduleserver.exception.SessionUserNotEqualsException;
+import com.example.scheduleserver.exception.ExceptionCode;
+import com.example.scheduleserver.exception.ValidException;
 import com.example.scheduleserver.repository.ScheduleRepository;
 import com.example.scheduleserver.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -48,18 +48,18 @@ public class ScheduleService {
 
     // 전체 조회
     public List<ScheduleResponseDto> getScheduleList(int pageNo) {
-        if(pageNo < 0){
-            throw new PageOverException();
+        // 요청 페이지 번호가 음수인 경우
+        if (pageNo < 0) {
+            throw new ValidException(ExceptionCode.PAGE_NOT_POSITIVE);
         }
 
-        // 요청에 맞는 페이지 정보 생성
+        // 요청에 맞는 페이지 정보 생성 후 반환
         Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
-        // 페이지에 맞는 Schedule 반환
         Page<Schedule> schedulePage = scheduleRepository.findAll(pageable);
 
-        // 요청 페이지가 total페이지보다 크면 예외 처리 -> NOT_FOUND 함께 응답
-        if(schedulePage.getTotalPages() < pageNo+1){
-            throw new PageOverException();
+        // 요청 페이지가 최대 페이지보다 클 경우
+        if (schedulePage.getTotalPages() < pageNo + 1) {
+            throw new ValidException(ExceptionCode.PAGE_OVER);
         }
 
         // Schedule을 ResponseDto로 변환하고, List로 바꿔서 반환
@@ -78,7 +78,6 @@ public class ScheduleService {
     public ScheduleResponseDto updateSchedule(Long id, String title, String contents, HttpSession session) {
         // 요청한 사람의 정보를 반환
         User sessionUser = (User) session.getAttribute("login");
-
 
         // 요청한 일정 반환
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
@@ -116,7 +115,7 @@ public class ScheduleService {
     // 일정을 작성한 사람과 요청한 사람이 동일한지 확인
     private void validateSessionUser(Long sessionUserId, Long scheduleUserId) {
         if (!sessionUserId.equals(scheduleUserId)) {
-            throw new SessionUserNotEqualsException();
+            throw new ValidException(ExceptionCode.SESSION_NOT_VALID);
         }
     }
 

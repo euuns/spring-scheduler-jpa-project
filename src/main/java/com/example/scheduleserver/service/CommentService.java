@@ -4,7 +4,8 @@ import com.example.scheduleserver.dto.comment.CommentResponseDto;
 import com.example.scheduleserver.entity.Comment;
 import com.example.scheduleserver.entity.Schedule;
 import com.example.scheduleserver.entity.User;
-import com.example.scheduleserver.exception.SessionUserNotEqualsException;
+import com.example.scheduleserver.exception.ExceptionCode;
+import com.example.scheduleserver.exception.ValidException;
 import com.example.scheduleserver.repository.CommentRepository;
 import com.example.scheduleserver.repository.ScheduleRepository;
 import jakarta.servlet.http.HttpSession;
@@ -74,7 +75,7 @@ public class CommentService {
     // 요청-작성자 비교
     private void validateSessionUser(Long sessionUserId, Long commentUserId) {
         if (!sessionUserId.equals(commentUserId)) {
-            throw new SessionUserNotEqualsException();
+            throw new ValidException(ExceptionCode.SESSION_NOT_VALID);
         }
     }
 }

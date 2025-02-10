@@ -3,15 +3,14 @@ package com.example.scheduleserver.service;
 import com.example.scheduleserver.config.PasswordEncoder;
 import com.example.scheduleserver.dto.user.UserResponseDto;
 import com.example.scheduleserver.entity.User;
-import com.example.scheduleserver.exception.SessionUserNotEqualsException;
+import com.example.scheduleserver.exception.ExceptionCode;
+import com.example.scheduleserver.exception.ValidException;
 import com.example.scheduleserver.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +46,7 @@ public class UserService {
 
         // 비밀번호가 일치하는지 확인
         if (!passwordEncoder.matches(password, findUser.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
+            throw new ValidException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
         // 유저 정보를 찾았고, 비밀번호가 일치한다면 로그인 성공 -> 세션 응답
@@ -74,7 +73,6 @@ public class UserService {
     public UserResponseDto updateUserInfo(Long id, String name, String password, HttpServletRequest httpServletRequest) {
         validateSessionUser(httpServletRequest, id);
         User findUser = userRepository.findByIdOrElseThrow(id);
-
 
         // 만약 name, password 중 변경하지 않는 내용이 있으면 이전과 동일하게 유지
         String updateName = findUser.getName();
@@ -113,7 +111,7 @@ public class UserService {
         User sessionUser = (User) session.getAttribute("login");
 
         if (!sessionUser.getId().equals(requestId)) {
-            throw new SessionUserNotEqualsException();
+            throw new ValidException(ExceptionCode.SESSION_NOT_VALID);
         }
     }
 
