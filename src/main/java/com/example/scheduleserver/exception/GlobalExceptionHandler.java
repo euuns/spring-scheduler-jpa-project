@@ -40,4 +40,10 @@ public class GlobalExceptionHandler {
         // BAD_REQUEST와 함께 에러 메세지 출력
         return ResponseEntity.badRequest().body(e.getMessage());
     }
+
+    // 기준 페이지를 초과하는 경우 NOT_FOUND 응답과 함께 메세지 반환
+    @ExceptionHandler(PageOverException.class)
+    public ResponseEntity<String> pageOverException(PageOverException e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

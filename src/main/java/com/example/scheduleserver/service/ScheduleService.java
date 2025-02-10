@@ -3,11 +3,13 @@ package com.example.scheduleserver.service;
 import com.example.scheduleserver.dto.schedule.ScheduleResponseDto;
 import com.example.scheduleserver.entity.Schedule;
 import com.example.scheduleserver.entity.User;
+import com.example.scheduleserver.exception.PageOverException;
 import com.example.scheduleserver.exception.SessionUserNotEqualsException;
 import com.example.scheduleserver.repository.ScheduleRepository;
 import com.example.scheduleserver.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ScheduleService {
 
@@ -24,7 +27,7 @@ public class ScheduleService {
     private final UserRepository userRepository;
 
     // 페이지 기본 사이즈
-    private final static int PAGE_SIZE = 10;
+    private final static int PAGE_SIZE = 3;
 
     // 일정 생성
     public ScheduleResponseDto addSchedule(String title, String contents, HttpSession session) {
@@ -45,10 +48,20 @@ public class ScheduleService {
 
     // 전체 조회
     public List<ScheduleResponseDto> getScheduleList(int pageNo) {
+        if(pageNo < 0){
+            throw new PageOverException();
+        }
+
         // 요청에 맞는 페이지 정보 생성
         Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
         // 페이지에 맞는 Schedule 반환
         Page<Schedule> schedulePage = scheduleRepository.findAll(pageable);
+
+        // 요청 페이지가 total페이지보다 크면 예외 처리 -> NOT_FOUND 함께 응답
+        if(schedulePage.getTotalPages() < pageNo+1){
+            throw new PageOverException();
+        }
+
         // Schedule을 ResponseDto로 변환하고, List로 바꿔서 반환
         return schedulePage.stream().map(ScheduleResponseDto::toDto).toList();
     }

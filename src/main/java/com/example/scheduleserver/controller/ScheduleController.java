@@ -31,7 +31,6 @@ public class ScheduleController {
     // 전체 일정 조회
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> getScheduleList(@RequestParam(required = false, defaultValue = "1", value = "page") int pageNo) {
-        // Page는 0부터 시작. 사용자는 1부터 입력. -> 인자에 '-1'을 넣어 1페이지를 요청했을 때 0 Page가 나오도록 지정
         List<ScheduleResponseDto> scheduleList = scheduleService.getScheduleList(pageNo-1);
         return new ResponseEntity<>(scheduleList, HttpStatus.OK);
     }
