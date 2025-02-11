@@ -10,7 +10,6 @@ import com.example.scheduleserver.repository.CommentRepository;
 import com.example.scheduleserver.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,12 +46,9 @@ public class CommentService extends ValidateSessionService {
         scheduleRepository.findByIdOrElseThrow(scheduleId);
 
         Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
-        List<Comment> findByScheduleComment = commentRepository.findAllByScheduleId(scheduleId);
+        Page<Comment> findByScheduleComment = commentRepository.findAllByScheduleId(scheduleId, pageable);
 
-        // List를 Page로 변환
-        Page<Comment> commentPage = listToPage(findByScheduleComment, pageable);
-
-        return commentPage.stream().map(CommentResponseDto::toDto).toList();
+        return findByScheduleComment.stream().map(CommentResponseDto::toDto).toList();
     }
 
 
@@ -75,27 +71,5 @@ public class CommentService extends ValidateSessionService {
         validateSessionUser(user.getId(), comment.getUser().getId());
 
         commentRepository.delete(comment);
-    }
-
-
-    // List를 Page로 변환
-    private Page<Comment> listToPage(List<Comment> list, Pageable pageable) {
-        // 페이지 범위 지정
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), list.size());
-
-        //offset으로 지정한 페이지 범위가 벗어나는 경우 예외 처리
-        validateRequestPage(start, end);
-
-        Page<Comment> commentPage = new PageImpl<>(list.subList(start, end), pageable, list.size());
-
-        // Page로 반환
-        return commentPage;
-    }
-
-    private void validateRequestPage(int start, int end) {
-        if (end < start) {
-            throw new ValidException(ExceptionCode.PAGE_OVER);
-        }
     }
 }

@@ -25,7 +25,7 @@ public class ScheduleController {
     // 일정 생성
     @PostMapping("")
     public ResponseEntity<ScheduleResponseDto> addSchedule(@Validated(AddSchedule.class) @RequestBody ScheduleRequestDto requestDto, HttpServletRequest httpServletRequest) {
-        User login = (User) httpServletRequest.getSession().getAttribute("long");
+        User login = (User) httpServletRequest.getSession().getAttribute("login");
         ScheduleResponseDto schedule = scheduleService.addSchedule(requestDto.getTitle(), requestDto.getContents(), login);
         return new ResponseEntity<>(schedule, HttpStatus.CREATED);
     }
@@ -49,7 +49,7 @@ public class ScheduleController {
     // 일정 수정
     @PutMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto, HttpServletRequest httpServletRequest) {
-        User login = (User) httpServletRequest.getSession().getAttribute("long");
+        User login = (User) httpServletRequest.getSession().getAttribute("login");
         ScheduleResponseDto schedule = scheduleService.updateSchedule(id, requestDto.getTitle(), requestDto.getContents(), login);
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
@@ -58,7 +58,7 @@ public class ScheduleController {
     // 일정 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, HttpServletRequest httpServletRequest) {
-        User login = (User) httpServletRequest.getSession().getAttribute("long");
+        User login = (User) httpServletRequest.getSession().getAttribute("login");
         scheduleService.deleteSchedule(id, login);
         return new ResponseEntity<>(HttpStatus.OK);
     }
