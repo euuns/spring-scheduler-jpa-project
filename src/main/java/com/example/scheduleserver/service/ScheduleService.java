@@ -25,6 +25,7 @@ public class ScheduleService{
     private final UserRepository userRepository;
     private final ValidateSessionService validateSessionService;
 
+
     private final static int PAGE_SIZE = 10;
 
     // 일정 생성
