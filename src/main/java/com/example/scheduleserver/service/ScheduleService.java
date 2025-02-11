@@ -24,7 +24,6 @@ public class ScheduleService extends ValidateSessionService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
 
-    // 페이지 기본 사이즈
     private final static int PAGE_SIZE = 10;
 
     // 일정 생성
@@ -54,7 +53,7 @@ public class ScheduleService extends ValidateSessionService {
         Page<Schedule> schedulePage = scheduleRepository.findAll(pageable);
 
         // 요청 페이지가 최대 페이지보다 클 경우
-        if (schedulePage.getTotalPages() < pageNo + 1) {
+        if (schedulePage.getTotalPages() <= pageNo) {
             throw new ValidException(ExceptionCode.PAGE_OVER);
         }
 

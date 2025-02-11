@@ -32,8 +32,8 @@ public class ScheduleController {
 
     // 전체 일정 조회
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> getScheduleList(@RequestParam(required = false, defaultValue = "1", value = "page") int pageNo) {
-        List<ScheduleResponseDto> scheduleList = scheduleService.getScheduleList(pageNo - 1);
+    public ResponseEntity<List<ScheduleResponseDto>> getScheduleList(@RequestParam(required = false, defaultValue = "0", value = "page") int pageNo) {
+        List<ScheduleResponseDto> scheduleList = scheduleService.getScheduleList(pageNo);
         return new ResponseEntity<>(scheduleList, HttpStatus.OK);
     }
 
