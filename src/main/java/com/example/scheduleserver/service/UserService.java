@@ -9,6 +9,7 @@ import com.example.scheduleserver.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,14 +26,17 @@ public class UserService{
     public UserResponseDto signup(String name, String email, String password) {
         // 비밀번호를 암호화
         String encoderPassword = passwordEncoder.encoder(password);
+        User savedUser = new User();
 
-        // 정보를 담은 User 생성
-        User getUser = new User(name, email, encoderPassword);
+        try{
+            User getUser = new User(name, email, encoderPassword);
+            User save = userRepository.save(getUser);
 
-        // SpringDataJPA를 이용해 SimpleJpaRepository 사용 -> save() 저장
-        // savedUser는 DB에 저장된 user entity
-        // getUser는 DB에 값이 저장되지 않아 id, createdDate, modifiedDate -> null
-        User savedUser = userRepository.save(getUser);
+            savedUser = save;
+
+        } catch (DataIntegrityViolationException e){
+            throw new ValidException(ExceptionCode.DUPLICATE_USER_EMAIL);
+        }
 
         return new UserResponseDto(savedUser.getName(), savedUser.getEmail(),
                 savedUser.getCreatedDate(), savedUser.getModifiedDate());

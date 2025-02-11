@@ -10,6 +10,9 @@ public enum ExceptionCode {
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND"),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT_NOT_FOUND"),
 
+    // 중복된 email로 가입을 요청하는 경우
+    DUPLICATE_USER_EMAIL(HttpStatus.BAD_REQUEST, "DUPLICATE_USER_EMAIL"),
+
     // 요청한 인물이 유효성 검사를 통과하지 못했을 경우
     SESSION_NOT_VALID(HttpStatus.FORBIDDEN, "SESSION_NOT_VALID"),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL_NOT_FOUND"),
