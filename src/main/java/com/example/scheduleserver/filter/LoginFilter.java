@@ -11,7 +11,7 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
 
     // 로그인 인증이 필요하지 않은 path
-    private static final String[] WHITE_LIST = {"/", "/user/signup", "/user/login", "/schedule"};
+    private static final String[] WHITE_LIST = {"/", "/user/signup", "/user/login"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

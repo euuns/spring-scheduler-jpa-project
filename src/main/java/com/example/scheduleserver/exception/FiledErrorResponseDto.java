@@ -1,4 +1,4 @@
-package com.example.scheduleserver.dto;
+package com.example.scheduleserver.exception;
 
 import lombok.Getter;
 
