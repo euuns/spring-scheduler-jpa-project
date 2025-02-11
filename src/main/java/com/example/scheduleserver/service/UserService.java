@@ -71,9 +71,8 @@ public class UserService extends ValidateSessionService {
 
     // 개인 정보 수정
     @Transactional
-    public UserResponseDto updateUserInfo(Long id, String name, String password, HttpSession session) {
-        User login = (User) session.getAttribute("login");
-        validateSessionUser(login.getId(), id);
+    public UserResponseDto updateUserInfo(Long id, String name, String password, User user) {
+        validateSessionUser(user.getId(), id);
         User findUser = userRepository.findByIdOrElseThrow(id);
 
         String encoderPassword = passwordEncoder.encoder(password);
@@ -96,7 +95,6 @@ public class UserService extends ValidateSessionService {
 
     // 회원 탈퇴
     public void delete(Long id, HttpSession session) {
-
         // 알맞는 유저가 요청을 했으면 session 삭제
         User login = (User) session.getAttribute("login");
         validateSessionUser(login.getId(), id);

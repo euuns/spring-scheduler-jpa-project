@@ -4,6 +4,7 @@ import com.example.scheduleserver.dto.user.LoginRequestDto;
 import com.example.scheduleserver.dto.user.SignupRequestDto;
 import com.example.scheduleserver.dto.user.UpdateUserInfoRequestDto;
 import com.example.scheduleserver.dto.user.UserResponseDto;
+import com.example.scheduleserver.entity.User;
 import com.example.scheduleserver.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,8 @@ public class UserController {
     // 개인 정보 수정
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUserInfo(@PathVariable Long id, @RequestBody UpdateUserInfoRequestDto requestDto, HttpServletRequest httpServletRequest) {
-        UserResponseDto user = userService.updateUserInfo(id, requestDto.getName(), requestDto.getPassword(), httpServletRequest.getSession());
+        User login = (User) httpServletRequest.getSession().getAttribute("long");
+        UserResponseDto user = userService.updateUserInfo(id, requestDto.getName(), requestDto.getPassword(), login);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

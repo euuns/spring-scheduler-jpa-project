@@ -2,6 +2,7 @@ package com.example.scheduleserver.controller;
 
 import com.example.scheduleserver.dto.comment.CommentRequestDto;
 import com.example.scheduleserver.dto.comment.CommentResponseDto;
+import com.example.scheduleserver.entity.User;
 import com.example.scheduleserver.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,8 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> addComment(@PathVariable Long scheduleId,
                                                          @Validated @RequestBody CommentRequestDto requestDto,
                                                          HttpServletRequest servletRequest) {
-
-        CommentResponseDto comment = commentService.addComment(scheduleId, servletRequest.getSession(), requestDto.getContents());
+        User login = (User) servletRequest.getSession().getAttribute("login");
+        CommentResponseDto comment = commentService.addComment(scheduleId, login, requestDto.getContents());
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
     }
 
@@ -36,7 +37,7 @@ public class CommentController {
     @GetMapping("/{scheduleId}/comment")
     public ResponseEntity<List<CommentResponseDto>> getCommentList(@PathVariable Long scheduleId,
                                                                    @RequestParam(required = false, defaultValue = "1", value = "page") int pageNo) {
-        List<CommentResponseDto> commentList = commentService.getCommentList(scheduleId, pageNo-1);
+        List<CommentResponseDto> commentList = commentService.getCommentList(scheduleId, pageNo - 1);
         return new ResponseEntity<>(commentList, HttpStatus.OK);
     }
 
@@ -47,8 +48,8 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,
                                                             @Validated @RequestBody CommentRequestDto requestDto,
                                                             HttpServletRequest servletRequest) {
-
-        CommentResponseDto updateComment = commentService.updateComment(commentId, servletRequest.getSession(), requestDto.getContents());
+        User login = (User) servletRequest.getSession().getAttribute("login");
+        CommentResponseDto updateComment = commentService.updateComment(commentId, login, requestDto.getContents());
         return new ResponseEntity<>(updateComment, HttpStatus.OK);
     }
 
@@ -58,8 +59,8 @@ public class CommentController {
     @DeleteMapping("/{scheduleId}/comment/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId,
                                               HttpServletRequest servletRequest) {
-
-        commentService.deleteComment(commentId, servletRequest.getSession());
+        User login = (User) servletRequest.getSession().getAttribute("login");
+        commentService.deleteComment(commentId, login);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

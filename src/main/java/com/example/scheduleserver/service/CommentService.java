@@ -8,7 +8,6 @@ import com.example.scheduleserver.exception.ExceptionCode;
 import com.example.scheduleserver.exception.ValidException;
 import com.example.scheduleserver.repository.CommentRepository;
 import com.example.scheduleserver.repository.ScheduleRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,11 +28,10 @@ public class CommentService extends ValidateSessionService {
     private final static int PAGE_SIZE = 20;
 
     // 댓글 작성
-    public CommentResponseDto addComment(Long scheduleId, HttpSession session, String contents) {
+    public CommentResponseDto addComment(Long scheduleId, User user, String contents) {
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
-        User login = (User) session.getAttribute("login");
 
-        Comment comment = new Comment(schedule, login, contents);
+        Comment comment = new Comment(schedule, user, contents);
         Comment saveComment = commentRepository.save(comment);
 
         return new CommentResponseDto(saveComment);
@@ -60,12 +58,11 @@ public class CommentService extends ValidateSessionService {
 
     // 댓글 수정
     @Transactional
-    public CommentResponseDto updateComment(Long commentId, HttpSession session, String contents) {
-        User login = (User) session.getAttribute("login");
+    public CommentResponseDto updateComment(Long commentId, User user, String contents) {
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
         // 요청자(login한 사람)와 댓글 작성자 비교
-        validateSessionUser(login.getId(), comment.getUser().getId());
+        validateSessionUser(user.getId(), comment.getUser().getId());
 
         comment.update(contents);
         return new CommentResponseDto(comment);
@@ -73,10 +70,9 @@ public class CommentService extends ValidateSessionService {
 
 
     // 댓글 삭제
-    public void deleteComment(Long commentId, HttpSession session) {
-        User login = (User) session.getAttribute("login");
+    public void deleteComment(Long commentId, User user) {
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
-        validateSessionUser(login.getId(), comment.getUser().getId());
+        validateSessionUser(user.getId(), comment.getUser().getId());
 
         commentRepository.delete(comment);
     }
