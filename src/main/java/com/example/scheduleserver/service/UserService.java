@@ -76,6 +76,8 @@ public class UserService extends ValidateSessionService {
         validateSessionUser(login.getId(), id);
         User findUser = userRepository.findByIdOrElseThrow(id);
 
+        String encoderPassword = passwordEncoder.encoder(password);
+
         // 만약 name, password 중 변경하지 않는 내용이 있으면 이전과 동일하게 유지
         String updateName = findUser.getName();
         String updatePassword = findUser.getPassword();
@@ -83,12 +85,11 @@ public class UserService extends ValidateSessionService {
             updateName = name;
         }
         if (password != null) {
-            updatePassword = password;
+            updatePassword = encoderPassword;
         }
 
         // 변경된 정보 저장
         findUser.updateInfo(updateName, updatePassword);
-
         return new UserResponseDto(findUser.getName(), findUser.getEmail(), findUser.getCreatedDate(), findUser.getModifiedDate());
     }
 
