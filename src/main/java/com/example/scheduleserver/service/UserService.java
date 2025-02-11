@@ -14,10 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService extends ValidateSessionService {
+public class UserService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ValidateSessionService validateSessionService;
 
 
     // 회원 가입
@@ -61,7 +62,7 @@ public class UserService extends ValidateSessionService {
     public UserResponseDto findById(Long id, HttpSession session) {
         // 요청한 id와 등록된 세션의 id가 일치하는지 검사 -> 아닐 경우 예외 처리
         User login = (User) session.getAttribute("login");
-        validateSessionUser(login.getId(), id);
+        validateSessionService.validateSessionUser(login.getId(), id);
 
         // 로그인한 유저일 경우 id를 이용해 정보 조회
         User findUser = userRepository.findByIdOrElseThrow(id);
@@ -72,7 +73,7 @@ public class UserService extends ValidateSessionService {
     // 개인 정보 수정
     @Transactional
     public UserResponseDto updateUserInfo(Long id, String name, String password, User user) {
-        validateSessionUser(user.getId(), id);
+        validateSessionService.validateSessionUser(user.getId(), id);
         User findUser = userRepository.findByIdOrElseThrow(id);
 
         String encoderPassword = passwordEncoder.encoder(password);
@@ -97,7 +98,7 @@ public class UserService extends ValidateSessionService {
     public void delete(Long id, HttpSession session) {
         // 알맞는 유저가 요청을 했으면 session 삭제
         User login = (User) session.getAttribute("login");
-        validateSessionUser(login.getId(), id);
+        validateSessionService.validateSessionUser(login.getId(), id);
         session.invalidate();
 
         // 유저 정보를 찾아 데이터 삭제

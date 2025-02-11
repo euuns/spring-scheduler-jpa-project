@@ -19,10 +19,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService extends ValidateSessionService {
+public class CommentService{
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
+    private final ValidateSessionService validateSessionService;
 
     private final static int PAGE_SIZE = 20;
 
@@ -58,7 +59,7 @@ public class CommentService extends ValidateSessionService {
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
         // 요청자(login한 사람)와 댓글 작성자 비교
-        validateSessionUser(user.getId(), comment.getUser().getId());
+        validateSessionService.validateSessionUser(user.getId(), comment.getUser().getId());
 
         comment.update(contents);
         return new CommentResponseDto(comment);
@@ -68,7 +69,7 @@ public class CommentService extends ValidateSessionService {
     // 댓글 삭제
     public void deleteComment(Long commentId, User user) {
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
-        validateSessionUser(user.getId(), comment.getUser().getId());
+        validateSessionService.validateSessionUser(user.getId(), comment.getUser().getId());
 
         commentRepository.delete(comment);
     }

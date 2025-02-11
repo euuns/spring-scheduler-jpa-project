@@ -19,10 +19,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleService extends ValidateSessionService {
+public class ScheduleService{
 
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+    private final ValidateSessionService validateSessionService;
 
     private final static int PAGE_SIZE = 10;
 
@@ -74,7 +75,7 @@ public class ScheduleService extends ValidateSessionService {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
         // 요청한 사람과, 선택한 일정의 작성자가 동일한지 확인
-        validateSessionUser(user.getId(), findSchedule.getUser().getId());
+        validateSessionService.validateSessionUser(user.getId(), findSchedule.getUser().getId());
 
         // 변경하지 않는 내용이 있으면(null인 경우) 이전 내용과 동일하게 유지
         String updateTitle = findSchedule.getTitle();
@@ -94,7 +95,7 @@ public class ScheduleService extends ValidateSessionService {
     // 선택 일정 삭제
     public void deleteSchedule(Long id, User user) {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
-        validateSessionUser(user.getId(), findSchedule.getUser().getId());
+        validateSessionService.validateSessionUser(user.getId(), findSchedule.getUser().getId());
 
         // 요청한 유저와 작성자가 일치하면 글 삭제
         scheduleRepository.delete(findSchedule);
