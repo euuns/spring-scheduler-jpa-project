@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
     // Filed Error 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<FiledErrorResponseDto>> violationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<List<FiledErrorResponseDto>> filedErrorException(MethodArgumentNotValidException e) {
         List<FiledErrorResponseDto> errors = new ArrayList<>();
 
         // 생성된 필드 에러를 모두 가져옴
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 
     // Enum을 사용해 예외 내역을 Dto에 담아서 반환하도록 지정
     @ExceptionHandler(ValidException.class)
-    public ResponseEntity<ErrorResponseDto> sessionNotEqualException(ValidException e) {
+    public ResponseEntity<ErrorResponseDto> violationException(ValidException e) {
         return new ResponseEntity<>(new ErrorResponseDto(e.getExceptionCode()), e.getExceptionCode().getStatus());
     }
 
