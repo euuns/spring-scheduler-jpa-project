@@ -22,7 +22,7 @@ public class I18nConfig {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:/messages/messages");
+        messageSource.setBasename("classpath:/messages/message");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
