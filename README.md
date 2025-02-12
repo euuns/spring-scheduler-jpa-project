@@ -1,5 +1,11 @@
-# 일정 관리 앱 간단하게 구현하기
-[작성 블로그 링크](https://rvrlo.tistory.com/entry/%EC%9D%BC%EC%A0%95-%EA%B4%80%EB%A6%AC-%EC%95%B1-%EC%84%9C%EB%B2%84-ver2) <br>
+# 일정 관리 앱 구현하기 ver.2 -JPA 사용
+[작성 블로그 링크](https://rvrlo.tistory.com/entry/%EC%9D%BC%EC%A0%95-%EA%B4%80%EB%A6%AC-%EC%95%B1-%EC%84%9C%EB%B2%84-ver2) <br><br>
+#### 트러블 슈팅
+[Global Exception Handler에서 Enum 사용하기](https://rvrlo.tistory.com/entry/Spring-Global-Exception-Handler%EC%97%90%EC%84%9C-Enum-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)
+
+[try-catch에서 SQLException이 잡아지지 않을 때 해결](https://rvrlo.tistory.com/entry/Spring-try-catch%EC%97%90%EC%84%9C-SQLException%EC%9D%B4-%EC%9E%A1%EC%95%84%EC%A7%80%EC%A7%80-%EC%95%8A%EC%9D%84-%EB%95%8C-%ED%95%B4%EA%B2%B0)
+
+[Enum에 i18n 적용하는 방법](https://rvrlo.tistory.com/entry/Spring-Enum%EC%97%90-i18n-%EC%A0%81%EC%9A%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)
 
 <br><br>
 
